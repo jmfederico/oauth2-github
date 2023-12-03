@@ -89,7 +89,7 @@ class GithubResourceOwner implements ResourceOwnerInterface
      *
      * @param string $domain
      *
-     * @return ResourceOwner
+     * @return self
      */
     public function setDomain($domain)
     {

@@ -3,10 +3,13 @@
 namespace League\OAuth2\Client\Provider;
 
 use League\OAuth2\Client\Provider\Exception\GithubIdentityProviderException;
-use League\OAuth2\Client\Token\AccessToken;
+use League\OAuth2\Client\Token\AccessTokenInterface;
 use League\OAuth2\Client\Tool\BearerAuthorizationTrait;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * @extends AbstractProvider<GithubResourceOwner>
+ */
 class Github extends AbstractProvider
 {
     use BearerAuthorizationTrait;
@@ -50,11 +53,11 @@ class Github extends AbstractProvider
     /**
      * Get provider url to fetch user details
      *
-     * @param AccessToken $token
+     * @param AccessTokenInterface $token
      *
      * @return string
      */
-    public function getResourceOwnerDetailsUrl(AccessToken $token)
+    public function getResourceOwnerDetailsUrl(AccessTokenInterface $token)
     {
         if ($this->domain === 'https://github.com') {
             return $this->apiDomain . '/user';
@@ -62,7 +65,7 @@ class Github extends AbstractProvider
         return $this->domain . '/api/v3/user';
     }
 
-    protected function fetchResourceOwnerDetails(AccessToken $token)
+    protected function fetchResourceOwnerDetails(AccessTokenInterface $token)
     {
         $response = parent::fetchResourceOwnerDetails($token);
 
@@ -117,10 +120,10 @@ class Github extends AbstractProvider
      * Generate a user object from a successful user details request.
      *
      * @param  array       $response
-     * @param  AccessToken $token
-     * @return \League\OAuth2\Client\Provider\ResourceOwnerInterface
+     * @param  AccessTokenInterface $token
+     * @return GithubResourceOwner
      */
-    protected function createResourceOwner(array $response, AccessToken $token)
+    protected function createResourceOwner(array $response, AccessTokenInterface $token): GithubResourceOwner
     {
         $user = new GithubResourceOwner($response);
 
