@@ -76,7 +76,10 @@ class Github extends AbstractProvider
 
             $responseEmail = $this->getParsedResponse($request);
 
-            $response['email'] = isset($responseEmail[0]['email']) ? $responseEmail[0]['email'] : null;
+            $response['email'] = null;
+            if (($responseEmail[0]['primary'] ?? false) === true && ($responseEmail[0]['verified']  ?? false) === true) {
+                $response['email'] = $responseEmail[0]['email'];
+            }
         }
 
         return $response;
